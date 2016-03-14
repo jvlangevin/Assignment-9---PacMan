@@ -16,25 +16,92 @@ public class Graph<E> {
 	private int width;
 	
 	/**
-	 * Base level constructor
+	 * Constructs the graph object.
+	 * 
+	 * On construct, reads a file and assigns the row column placement of each character
+	 * in the file to maze[][]. This is accomplised by readMapFromFile.
+	 * The constructor, when called, will need the string name of the file.
+	 * After maze is initialized, assigns that character to a 2D matrix of Nodes
+	 * with the corresponding row column value found in maze[][]. If 'X' is the character,
+	 * the object that enters the node at that position is a null value.
 	 */
-	public Graph(){
-		this.nodes = new Node[height][width];
-	}
 	
 	public Graph(String inputFile) throws IOException{
-		
 		maze = this.readMapFromFile(inputFile);	
+		this.nodes = new Node[this.height][this.width];
 		
 		for(int i = 0; i < height; i++)
 		{
-			for(int j = 0; i < width; j++)
+			for(int j = 0; j < width; j++)
 			{
-				nodes[i][j].setData(maze[i][j]); 
+				if(maze[i][j] != 'X'){
+					//this is the node constructor
+					//on construct of new node, the new node is assigned the
+					//value of the object passed in Node(Object). 
+					this.nodes[i][j] = new Node((Object)maze[i][j]); 
+				}
+				else{
+					//value of null gets assigned to this node if it's an 'X'
+					this.nodes[i][j] = new Node(null);
+				}
 			}
 		}
 		
 	}
+	
+	/**
+	 * Helper method for testing; returns the value of the node at [row][column]
+	 * if showNulls = true, return value will be null if node object is null. if
+	 * showNulls = false, return value will be X if node object is null.  Used in
+	 * method printMap currently.
+	 * @return
+	 */
+	public Object printNodeDataHelper(int row, int column, boolean showNulls){
+		if(showNulls == true){
+			return nodes[row][column].getData();
+		}
+		else{
+			if(nodes[row][column].getData() == null){
+				return 'X';
+			}
+			else{
+				return nodes[row][column].getData();
+			}
+		}
+	}
+	
+	
+	/**
+	 * Helper method for printing the map
+	 * @return
+	 */
+	public int getHeight(){
+		return this.height;
+	}
+	
+	/**
+	 * Helper method for printing the map
+	 */
+	public int getWidth(){
+		return this.width;
+	}
+	
+	/**
+	 * Helper method - prints each node's value to make sure map was 
+	 * correctly transferred to nodes. if param = false, converts null values to X
+	 * @param showNulls - when true, map is printed with nulls, when false, printed with X in it's place
+	 */
+	public void printMap(boolean showNulls){
+		for(int i = 0; i < this.getHeight(); i++)
+		{
+			for(int j = 0; j < this.getWidth(); j++)
+			{
+				System.out.print(this.printNodeDataHelper(i,j, showNulls));
+			}
+			System.out.print('\n');
+		}
+	}
+	
 	
 	public E breadthFirstSearch(Node current, Node goal){
 		
@@ -84,7 +151,8 @@ public class Graph<E> {
 		  for(int i = 0; i < this.height; i++)
 		  {
 			  //puts a character array in each row, giving us a mapArray[row][characterArray/column]
-			  mapArray[i] = reader.readLine().toCharArray();			  
+			  mapArray[i] = reader.readLine().toCharArray();	
+			  
 		  }
 		  
 		  return mapArray;
