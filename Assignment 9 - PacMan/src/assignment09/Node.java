@@ -2,11 +2,16 @@ package assignment09;
 
 import java.util.List;
 
-public class Node<E> {
+public class Node{
 
-	private E data;
+	private char data;
 	private boolean visited;
-	private Node<E> cameFrom;
+	private Node cameFrom;
 	private int indegree;
-	private List<Node<E>> neighbors;
+	private List<Node> neighbors;
+		
+	public void setData(char data){
+		this.data = data;
+	}
+	
 }
