@@ -6,11 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Graph<E> {
 
 	private Node[][] nodes;
+	private Node start;
+	private Node goal;
 	private char[][] maze;
 	private int height;
 	private int width;
@@ -19,7 +22,7 @@ public class Graph<E> {
 	 * Constructs the graph object.
 	 * 
 	 * On construct, reads a file and assigns the row column placement of each character
-	 * in the file to maze[][]. This is accomplised by readMapFromFile.
+	 * in the file to maze[][]. This is accomplished by readMapFromFile.
 	 * The constructor, when called, will need the string name of the file.
 	 * After maze is initialized, assigns that character to a 2D matrix of Nodes
 	 * with the corresponding row column value found in maze[][]. If 'X' is the character,
@@ -34,11 +37,38 @@ public class Graph<E> {
 		{
 			for(int j = 0; j < width; j++)
 			{
+				
 				if(maze[i][j] != 'X'){
 					//this is the node constructor
 					//on construct of new node, the new node is assigned the
 					//value of the object passed in Node(Object). 
-					this.nodes[i][j] = new Node((Object)maze[i][j]); 
+					this.nodes[i][j] = new Node((Object)maze[i][j]);
+					
+					if (maze[i][j] == 'S'){
+						start = nodes[i][j];
+					}
+					
+					if (maze[i][j] == 'G'){
+						goal = nodes[i][j];
+					}
+					
+					/*
+					 * Determine the number of neighbors of the current node.
+					 * Note that we only check the node above the current node
+					 * and the node to the left of the current node. Since we're
+					 * constructing the graph top to bottom and left to right,
+					 * the nodes at [i][j+1] and at [i+1][j] will not have been
+					 * initialized yet.
+					 */
+					if (maze[i-1][j] != 'X'){
+						nodes[i][j].addNeighbor(nodes[i-1][j]);
+						nodes[i-1][j].addNeighbor(nodes[i][j]);
+					}
+					if (maze[i][j-1] != 'X'){
+						nodes[i][j].addNeighbor(nodes[i][j-1]);
+						nodes[i][j-1].addNeighbor(nodes[i][j]);
+					}
+					 
 				}
 				else{
 					//value of null gets assigned to this node if it's an 'X'
@@ -87,6 +117,13 @@ public class Graph<E> {
 	}
 	
 	/**
+	 * Returns the node at the indicated position in the maze.
+	 */
+	public Node getNode(int row, int col){
+		return nodes[row][col];
+	}
+	
+	/**
 	 * Helper method - prints each node's value to make sure map was 
 	 * correctly transferred to nodes. if param = false, converts null values to X
 	 * @param showNulls - when true, map is printed with nulls, when false, printed with X in it's place
@@ -102,22 +139,29 @@ public class Graph<E> {
 		}
 	}
 	
-	
-	public E breadthFirstSearch(Node current, Node goal){
+	public void breadthFirstSearch(Node start, Node goal){
 		
-		return null;
-	}
-	
-	public E depthFirstSearch(Node current, Node goal){
+		start.setVisited();
+		LinkedList<Node> queue = new LinkedList<>();
+		queue.add(start);
 		
-		return null;
+		while(!queue.isEmpty()){
+			
+			Node current = queue.remove();
+			
+			if (current.equals(goal)){
+				return;
+			}
+			
+			for (Node node : current.getNeighbors()){
+				if (!node.visited()){
+					node.cameFrom(current);
+					node.setVisited();
+					queue.add(current);
+				}
+			}
+		}
 	}
-	
-	public List<E> topologicalSort(Graph<E> graph){
-
-		return null;
-	}
-	
 	
 	/**
 	 * This method will be called in the constructor. It takes the text file and converts it
@@ -158,6 +202,5 @@ public class Graph<E> {
 		  return mapArray;
 
 	}
-
 	
 }

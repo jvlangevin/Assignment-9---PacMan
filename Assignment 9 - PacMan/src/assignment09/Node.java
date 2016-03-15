@@ -1,22 +1,20 @@
 package assignment09;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Node{
 
 	private Object data;
 	private boolean visited;
 	private Node cameFrom;
-	private int indegree;
-	private List<Node> neighbors;
+	private ArrayList<Node> neighbors;
 		
 	//on construct without anything passed in the (), these values are assigned
 	public Node(){
 		this.data = null;
 		this.visited = false;
 		this.cameFrom = null;
-		this.indegree = 0;
-		this.neighbors = null;
+		this.neighbors = new ArrayList<Node>();
 		
 	}
 	
@@ -46,14 +44,43 @@ public class Node{
 		return this.data;
 	}
 	
+	/**
+	 * Returns the list of nodes that connect to this node.
+	 */
+	public ArrayList<Node> getNeighbors(){
+		return this.neighbors;
+	}
 	
 	/**
 	 * This method assigns a neighbor node to this node
 	 * currently unused - just anticipating it's use
 	 * @param neighborNode
 	 */
-	public void addNeighbors(Node neighborNode){
+	public void addNeighbor(Node neighborNode){
 		this.neighbors.add(neighborNode);
+	}
+	
+	/**
+	 * @return
+	 * 	True if this node has been visited, false otherwise
+	 */
+	public boolean visited(){
+		return (this.visited);
+	}
+	
+	/**
+	 * Marks this node as having been visited.
+	 */
+	public void setVisited(){
+		this.visited = true;
+	}
+	
+	/**
+	 * Sets the specified node as the one that was visited prior to this node.
+	 * @param node - the node that preceded this node
+	 */ 
+	public void cameFrom(Node node){
+		this.cameFrom = node;
 	}
 	
 }
