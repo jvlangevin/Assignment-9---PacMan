@@ -12,10 +12,8 @@ public class GraphTest {
 		Graph testSolution = new Graph("mazes/mazes/bigMazeSol.txt");
 		
 		testBFS.breadthFirstSearch(testBFS.getStart(), testBFS.getGoal());
-		
-		
-		assertEquals(true, testBFS.printMap().equals(testSolution.printMap()));
-		
+		assertEquals(true, testBFS.getStepCount() == testSolution.getStepCount());
+
 	}
 	
 	@Test
@@ -25,7 +23,7 @@ public class GraphTest {
 		
 		testBFS.breadthFirstSearch(testBFS.getStart(), testBFS.getGoal());
 		
-		assertEquals(true, testBFS.printMap().equals(testSolution.printMap()));
+		assertEquals(true, testBFS.getStepCount() == testSolution.getStepCount());
 		
 	}
 	
@@ -36,7 +34,7 @@ public class GraphTest {
 		
 		testBFS.breadthFirstSearch(testBFS.getStart(), testBFS.getGoal());
 		
-		assertEquals(true, testBFS.printMap().equals(testSolution.printMap()));
+		assertEquals(true, testBFS.getStepCount() == testSolution.getStepCount());
 		
 	}
 	
@@ -47,7 +45,7 @@ public class GraphTest {
 		
 		testBFS.breadthFirstSearch(testBFS.getStart(), testBFS.getGoal());
 		
-		assertEquals(true, testBFS.printMap().equals(testSolution.printMap()));
+		assertEquals(true, testBFS.getStepCount() == testSolution.getStepCount());
 		
 	}
 	
@@ -58,7 +56,7 @@ public class GraphTest {
 		
 		testBFS.breadthFirstSearch(testBFS.getStart(), testBFS.getGoal());
 		
-		assertEquals(true, testBFS.printMap().equals(testSolution.printMap()));
+		assertEquals(true, testBFS.getStepCount() == testSolution.getStepCount());
 		
 	}
 	
@@ -69,7 +67,7 @@ public class GraphTest {
 		
 		testBFS.breadthFirstSearch(testBFS.getStart(), testBFS.getGoal());
 		
-		assertEquals(true, testBFS.printMap().equals(testSolution.printMap()));
+		assertEquals(true, testBFS.getStepCount() == testSolution.getStepCount());
 		
 	}
 	
@@ -80,7 +78,7 @@ public class GraphTest {
 		
 		testBFS.breadthFirstSearch(testBFS.getStart(), testBFS.getGoal());
 		
-		assertEquals(true, testBFS.printMap().equals(testSolution.printMap()));
+		assertEquals(true, testBFS.getStepCount() == testSolution.getStepCount());
 		
 	}
 	
@@ -91,7 +89,7 @@ public class GraphTest {
 		
 		testBFS.breadthFirstSearch(testBFS.getStart(), testBFS.getGoal());
 		
-		assertEquals(true, testBFS.printMap().equals(testSolution.printMap()));
+		assertEquals(true, testBFS.getStepCount() == testSolution.getStepCount());
 		
 	}
 	
@@ -102,7 +100,7 @@ public class GraphTest {
 		
 		testBFS.breadthFirstSearch(testBFS.getStart(), testBFS.getGoal());
 		
-		assertEquals(true, testBFS.printMap().equals(testSolution.printMap()));
+		assertEquals(true, testBFS.getStepCount() == testSolution.getStepCount());
 		
 	}
 	
@@ -113,7 +111,7 @@ public class GraphTest {
 		
 		testBFS.breadthFirstSearch(testBFS.getStart(), testBFS.getGoal());
 		
-		assertEquals(true, testBFS.printMap().equals(testSolution.printMap()));
+		assertEquals(true, testBFS.getStepCount() == testSolution.getStepCount());
 		
 	}
 
