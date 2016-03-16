@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Graph<E> {
+public class Graph {
 
 	private Node[][] nodes;
 	private Node start;
@@ -17,6 +17,7 @@ public class Graph<E> {
 	private char[][] maze;
 	private int height;
 	private int width;
+	private boolean goalReached;
 	
 	/**
 	 * Constructs the graph object.
@@ -29,8 +30,9 @@ public class Graph<E> {
 	 * the object that enters the node at that position is a null value.
 	 */
 	
-	public Graph(String inputFile) throws IOException{
+	public Graph(String inputFile) {
 		maze = this.readMapFromFile(inputFile);	
+		this.goalReached =false;
 		this.nodes = new Node[this.height][this.width];
 		
 		for(int i = 0; i < height; i++)
@@ -86,18 +88,15 @@ public class Graph<E> {
 	 * method printMap currently.
 	 * @return
 	 */
-	public Object printNodeDataHelper(int row, int column, boolean showNulls){
-		if(showNulls == true){
-			return nodes[row][column].getData();
+	public Object printNodeDataHelper(int row, int column){
+		
+		if(nodes[row][column].getData() == null){
+			return 'X';
 		}
 		else{
-			if(nodes[row][column].getData() == null){
-				return 'X';
-			}
-			else{
-				return nodes[row][column].getData();
-			}
+			return nodes[row][column].getData();
 		}
+		
 	}
 	
 	
@@ -123,20 +122,32 @@ public class Graph<E> {
 		return nodes[row][col];
 	}
 	
+	public Node getStart(){
+		return this.start;
+	}
+	
+	public Node getGoal(){
+		return this.goal;
+	}
+	
 	/**
 	 * Helper method - prints each node's value to make sure map was 
 	 * correctly transferred to nodes. if param = false, converts null values to X
 	 * @param showNulls - when true, map is printed with nulls, when false, printed with X in it's place
 	 */
-	public void printMap(boolean showNulls){
+	public String printMap(){
+		
+		String returnValue = ""+this.getHeight() + ' ' + this.getWidth() + '\n';
+		
 		for(int i = 0; i < this.getHeight(); i++)
 		{
 			for(int j = 0; j < this.getWidth(); j++)
 			{
-				System.out.print(this.printNodeDataHelper(i,j, showNulls));
+				returnValue += this.printNodeDataHelper(i,j);
 			}
-			System.out.print('\n');
+			returnValue += '\n';
 		}
+		return returnValue;
 	}
 	
 	public void breadthFirstSearch(Node start, Node goal){
@@ -145,13 +156,27 @@ public class Graph<E> {
 		LinkedList<Node> queue = new LinkedList<>();
 		queue.add(start);
 		
-		while(!queue.isEmpty()){
-			
+		while(!queue.isEmpty()){			
 			Node current = queue.remove();
 			
-			if (current.equals(goal)){
-				for (Node node : current.getNeighbors()){
-					if (node.visited()){
+			for (Node node : current.getNeighbors()){
+				if (!node.visited() && this.goalReached == false){
+					node.setCameFrom(current);
+					if(node != this.goal)
+					{
+						node.setVisited();
+						queue.add(node);
+					}
+					else{
+						this.goalReached = true;
+					}
+				}
+			}
+			
+			if (this.goalReached){
+				for (Node node : goal.getNeighbors()){
+					
+					if (node.visited() && node == goal.cameFrom()){
 						
 						node.setData('.');
 						Node previous = node.cameFrom();
@@ -163,14 +188,7 @@ public class Graph<E> {
 						}
 					}
 				}
-			}
-			
-			for (Node node : current.getNeighbors()){
-				if (!node.visited()){
-					node.setCameFrom(current);
-					node.setVisited();
-					queue.add(node);
-				}
+				queue.clear();
 			}
 		}
 	}
@@ -184,7 +202,7 @@ public class Graph<E> {
 	 * @return: a character matrix so we have a position system of which to assign nodes and values
 	 * @throws IOException
 	 */
-	private char[][] readMapFromFile(String filename) throws IOException{
+	private char[][] readMapFromFile(String filename) {
 
 	    File file = new File(filename);
 	    BufferedReader reader = null;
@@ -194,7 +212,13 @@ public class Graph<E> {
 			e.printStackTrace();
 		}
 		
-		  String[] dimensions = reader.readLine().split(" ");
+		  String[] dimensions = null;
+		try {
+			dimensions = reader.readLine().split(" ");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		  //sets our height and width
 		  this.height = Integer.parseInt(dimensions[0]);
@@ -206,7 +230,12 @@ public class Graph<E> {
 		  for(int i = 0; i < this.height; i++)
 		  {
 			  //puts a character array in each row, giving us a mapArray[row][characterArray/column]
-			  mapArray[i] = reader.readLine().toCharArray();	
+			  try {
+				mapArray[i] = reader.readLine().toCharArray();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
 			  
 		  }
 		  

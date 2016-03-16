@@ -8,14 +8,24 @@ import java.io.IOException;
 
 public class GraphMethodTest {
 
-	public static <E> void main(String[] args) throws IOException{
+	public static void main(String[] args){
 		
 		
 		
-		Graph<E> testGraph = new Graph("mazes/mazes/mediumMaze.txt");
+		Graph testBFS = new Graph("mazes/mazes/demoMaze.txt");
+		Graph testSolution = new Graph("mazes/mazes/demoMazeSol.txt");
+		
+		testBFS.breadthFirstSearch(testBFS.getStart(), testBFS.getGoal());
 		
 		//false value changes nulls to 'X'
-		testGraph.printMap(false);
+		if(testBFS.printMap().equals(testSolution.printMap()));
+		{
+			System.out.println("Solution correct!");
+		}
+		
+		if(!testBFS.printMap().equals(testSolution.printMap())){
+			System.out.println("Solution incorrect.");
+		}
 	   
 		
 	}
