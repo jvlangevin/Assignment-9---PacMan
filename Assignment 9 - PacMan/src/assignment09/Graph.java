@@ -150,14 +150,26 @@ public class Graph<E> {
 			Node current = queue.remove();
 			
 			if (current.equals(goal)){
-				return;
+				for (Node node : current.getNeighbors()){
+					if (node.visited()){
+						
+						node.setData('.');
+						Node previous = node.cameFrom();
+						
+						while (previous.cameFrom() != null){
+							
+							previous.setData('.');
+							previous = previous.cameFrom();
+						}
+					}
+				}
 			}
 			
 			for (Node node : current.getNeighbors()){
 				if (!node.visited()){
-					node.cameFrom(current);
+					node.setCameFrom(current);
 					node.setVisited();
-					queue.add(current);
+					queue.add(node);
 				}
 			}
 		}
@@ -179,7 +191,6 @@ public class Graph<E> {
 		try {
 			reader = new BufferedReader(new FileReader(file));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

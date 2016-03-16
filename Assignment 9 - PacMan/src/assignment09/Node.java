@@ -76,11 +76,21 @@ public class Node{
 	}
 	
 	/**
+	 * Returns the node that was visited previous to this node.
+	 */
+	public Node cameFrom(){
+		return cameFrom;
+	}
+	/**
 	 * Sets the specified node as the one that was visited prior to this node.
 	 * @param node - the node that preceded this node
 	 */ 
-	public void cameFrom(Node node){
+	public void setCameFrom(Node node){
 		this.cameFrom = node;
 	}
 	
+//	public static void main(String[] args){
+//		Node node = new Node();
+//		System.out.println(node.cameFrom());
+//	}
 }
