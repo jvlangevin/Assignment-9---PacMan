@@ -27,25 +27,25 @@ public class Graph {
 	 */
 
 	public Graph(String inputFile){
-		maze = this.readMapFromFile(inputFile);
+		this.maze = this.readMapFromFile(inputFile);
 		this.goalReached = false;
 		this.nodes = new Node[this.height][this.width];
 
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
+		for (int i = 0; i < this.height; i++) {
+			for (int j = 0; j < this.width; j++) {
 
-				if (maze[i][j] != 'X') {
+				if (this.maze[i][j] != 'X') {
 					// this is the node constructor
 					// on construct of new node, the new node is assigned the
 					// value of the object passed in Node(Object).
-					this.nodes[i][j] = new Node((Object) maze[i][j]);
+					this.nodes[i][j] = new Node((Object) this.maze[i][j]);
 
-					if (maze[i][j] == 'S') {
-						start = nodes[i][j];
+					if (this.maze[i][j] == 'S') {
+						this.start = this.nodes[i][j];
 					}
 
 					if (maze[i][j] == 'G') {
-						goal = nodes[i][j];
+						this.goal = this.nodes[i][j];
 					}
 					
 					/*
@@ -54,13 +54,13 @@ public class Graph {
 					 * to bottom and left to right, the nodes at [i][j+1] and at [i+1][j] will not have been initialized
 					 * yet.
 					 */
-					if (maze[i - 1][j] != 'X') {
-						nodes[i][j].addNeighbor(nodes[i - 1][j]);
-						nodes[i - 1][j].addNeighbor(nodes[i][j]);
+					if (this.maze[i - 1][j] != 'X') {
+						this.nodes[i][j].addNeighbor(this.nodes[i - 1][j]);
+						this.nodes[i - 1][j].addNeighbor(this.nodes[i][j]);
 					}
-					if (maze[i][j - 1] != 'X') {
-						nodes[i][j].addNeighbor(nodes[i][j - 1]);
-						nodes[i][j - 1].addNeighbor(nodes[i][j]);
+					if (this.maze[i][j - 1] != 'X') {
+						this.nodes[i][j].addNeighbor(this.nodes[i][j - 1]);
+						this.nodes[i][j - 1].addNeighbor(this.nodes[i][j]);
 					}
 
 				}
@@ -82,59 +82,35 @@ public class Graph {
 	 */
 	public Object printNodeDataHelper(int row, int column) {
 
-		if (nodes[row][column].getData() == null) {
+		if (this.getNode(row, column).getData() == null) {
 			return 'X';
 		}
 		else {
-			return nodes[row][column].getData();
+			return this.getNode(row, column).getData();
 		}
 
 	}
 
-	/**
-	 * Helper method for printing the map
-	 * 
-	 * @return
-	 */
-	public int getHeight() {
-		return this.height;
-	}
 
-	/**
-	 * Helper method for printing the map
-	 */
-	public int getWidth() {
-		return this.width;
-	}
 
 	/**
 	 * Returns the node at the indicated position in the maze.
 	 */
 	public Node getNode(int row, int col) {
-		return nodes[row][col];
-	}
-
-	public Node getStart() {
-		return this.start;
-	}
-
-	public Node getGoal() {
-		return this.goal;
+		return this.nodes[row][col];
 	}
 
 	/**
 	 * Helper method - prints each node's value to make sure map was correctly transferred to nodes. if param = false,
 	 * converts null values to X
-	 * 
-	 * @param showNulls
-	 *            - when true, map is printed with nulls, when false, printed with X in it's place
-	 */
+	 *
+	 **/
 	public String printMap() {
 
-		String returnValue = "" + this.getHeight() + ' ' + this.getWidth() + '\n';
+		String returnValue = "" + this.height + ' ' + this.width + '\n';
 
-		for (int i = 0; i < this.getHeight(); i++) {
-			for (int j = 0; j < this.getWidth(); j++) {
+		for (int i = 0; i < this.height; i++) {
+			for (int j = 0; j < this.width; j++) {
 				returnValue += this.printNodeDataHelper(i, j);
 			}
 			returnValue += '\n';
@@ -142,11 +118,11 @@ public class Graph {
 		return returnValue;
 	}
 
-	public void breadthFirstSearch(Node start, Node goal) {
+	public void breadthFirstSearch() {
 
-		start.setVisited();
+		this.start.setVisited();
 		LinkedList<Node> queue = new LinkedList<>();
-		queue.add(start);
+		queue.add(this.start);
 
 		while (!queue.isEmpty()) {
 			Node current = queue.remove();
@@ -160,30 +136,26 @@ public class Graph {
 					}
 					else {
 						this.goalReached = true;
+						queue.clear();
 					}
 				}
-			}
-
-			if (this.goalReached) {
-				for (Node node : goal.getNeighbors()) {
-
-					if (node.visited() && node == goal.cameFrom()) {
-
-						node.setData('.');
-						Node previous = node.cameFrom();
-
-						while (previous.cameFrom() != null) {
-
-							previous.setData('.');
-							previous = previous.cameFrom();
-						}
-					}
-				}
-				queue.clear();
 			}
 		}
-	}
+		
+		if (this.goalReached) {
 
+			Node previous = this.goal.cameFrom();
+
+			while (previous.cameFrom() != null) {
+
+				previous.setData('.');
+				previous = previous.cameFrom();
+			}
+		}
+		
+		
+	}
+		
 	/**
 	 * This method will be called in the constructor. It takes the text file and converts it to a character matrix that
 	 * can be looped over to assign character values to our nodes as well as a row and column for our nodes

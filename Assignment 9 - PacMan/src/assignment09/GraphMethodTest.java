@@ -1,11 +1,5 @@
 package assignment09;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
 public class GraphMethodTest {
 
 	public static void test(Graph test, Graph solution){
@@ -23,9 +17,9 @@ public class GraphMethodTest {
 		Graph testBFS = new Graph("mazes/mazes/bigMaze.txt");
 		Graph testSolution = new Graph("mazes/mazes/bigMazeSol.txt"); 
 		
-		testBFS.breadthFirstSearch(testBFS.getStart(), testBFS.getGoal());
+		testBFS.breadthFirstSearch();
 		
 		test(testBFS, testSolution);
 			
-}
+	}
 }

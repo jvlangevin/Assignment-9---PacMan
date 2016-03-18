@@ -9,7 +9,9 @@ public class Node{
 	private Node cameFrom;
 	private ArrayList<Node> neighbors;
 		
-	//on construct without anything passed in the (), these values are assigned
+	/**
+	 * Base level constructor. Initializes member variables.
+	 */
 	public Node(){
 		this.data = null;
 		this.visited = false;
@@ -18,7 +20,10 @@ public class Node{
 		
 	}
 	
-	//if only an object is passed in the constructor, it assigns that value to this node
+	/**
+	 * 
+	 * @param data - the value contained inside the node
+	 */
 	public Node(Object data){
 		this();
 		this.data = data;
