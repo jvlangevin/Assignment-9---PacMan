@@ -2,6 +2,11 @@ package assignment09;
 
 import java.util.ArrayList;
 
+/**
+ * A node object to be used in a graph.
+ * @author Jason Langevin, Nathan Novak
+ *
+ */
 public class Node{
 
 	private Object data;
@@ -17,7 +22,6 @@ public class Node{
 		this.visited = false;
 		this.cameFrom = null;
 		this.neighbors = new ArrayList<Node>();
-		
 	}
 	
 	/**
@@ -57,9 +61,8 @@ public class Node{
 	}
 	
 	/**
-	 * This method assigns a neighbor node to this node
-	 * currently unused - just anticipating it's use
-	 * @param neighborNode
+	 * Adds the specified node to this node's list of neighbors.
+	 * @param neighborNode -- a node that connects to this node
 	 */
 	public void addNeighbor(Node neighborNode){
 		this.neighbors.add(neighborNode);

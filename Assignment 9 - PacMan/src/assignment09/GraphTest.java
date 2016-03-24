@@ -4,6 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * Tests the shortest-path algorithm of the Graph class.
+ * @author Jason Langevin, Nathan Novak
+ *
+ */
 public class GraphTest {
 
 	@Test

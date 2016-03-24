@@ -7,6 +7,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 
+/**
+ * A graph representation of a maze.
+ * @author Jason Langevin, Nathan Novak
+ */
 public class Graph {
 
 	private Node[][] nodes;
@@ -25,16 +29,16 @@ public class Graph {
 	 * maze is initialized, assigns that character to a 2D matrix of Nodes with the corresponding row column value found
 	 * in maze[][]. If 'X' is the character, the object that enters the node at that position is a null value.
 	 */
-
 	public Graph(String inputFile){
+
 		this.maze = this.readMapFromFile(inputFile);
 		this.goalReached = false;
 		this.nodes = new Node[this.height][this.width];
 
 		for (int i = 0; i < this.height; i++) {
 			for (int j = 0; j < this.width; j++) {
-
 				if (this.maze[i][j] != 'X') {
+
 					// this is the node constructor
 					// on construct of new node, the new node is assigned the
 					// value of the object passed in Node(Object).
@@ -47,7 +51,7 @@ public class Graph {
 					if (maze[i][j] == 'G') {
 						this.goal = this.nodes[i][j];
 					}
-					
+
 					/*
 					 * Determine the number of neighbors of the current node. Note that we only check the node above the
 					 * current node and the node to the left of the current node. Since we're constructing the graph top
@@ -65,7 +69,10 @@ public class Graph {
 
 				}
 				else {
-					// value of null gets assigned to this node if it's an 'X'
+					/*
+					 * If none of the above conditions are met, it is safe to assume that the node represents a wall,
+					 * and is thus assigned the char value 'X'.
+					 */
 					this.nodes[i][j] = new Node('X');
 				}
 			}
@@ -77,8 +84,6 @@ public class Graph {
 	 * Helper method for testing; returns the value of the node at [row][column] if showNulls = true, return value will
 	 * be null if node object is null. if showNulls = false, return value will be X if node object is null. Used in
 	 * method printMap currently.
-	 * 
-	 * @return
 	 */
 	public Object printNodeDataHelper(int row, int column) {
 
@@ -91,8 +96,6 @@ public class Graph {
 
 	}
 
-
-
 	/**
 	 * Returns the node at the indicated position in the maze.
 	 */
@@ -103,7 +106,6 @@ public class Graph {
 	/**
 	 * Helper method - prints each node's value to make sure map was correctly transferred to nodes. if param = false,
 	 * converts null values to X
-	 *
 	 **/
 	public String printMap() {
 
@@ -125,23 +127,34 @@ public class Graph {
 		queue.add(this.start);
 
 		while (!queue.isEmpty()) {
+
 			Node current = queue.remove();
 
+			// Loops through the current node's neighbors
 			for (Node node : current.getNeighbors()) {
+
+				// If this neighbor has not been visited and we have not yet reached the goal
 				if (!node.visited() && this.goalReached == false) {
+
 					node.setCameFrom(current);
+
+					// If this neighbor is not the goal, set it as visited and add it to the queue
 					if (node != this.goal) {
 						node.setVisited();
 						queue.add(node);
 					}
+
+					// If this neighbor is the goal, clear the queue and exit the for-loop
 					else {
 						this.goalReached = true;
 						queue.clear();
+						continue;
 					}
 				}
 			}
 		}
-		
+
+		// If we have reached the goal, retrace the path back to the start
 		if (this.goalReached) {
 
 			Node previous = this.goal.cameFrom();
@@ -152,10 +165,8 @@ public class Graph {
 				previous = previous.cameFrom();
 			}
 		}
-		
-		
 	}
-		
+
 	/**
 	 * This method will be called in the constructor. It takes the text file and converts it to a character matrix that
 	 * can be looped over to assign character values to our nodes as well as a row and column for our nodes
@@ -169,6 +180,7 @@ public class Graph {
 
 		File file = new File(filename);
 		BufferedReader reader = null;
+
 		try {
 			reader = new BufferedReader(new FileReader(file));
 		}
@@ -177,6 +189,7 @@ public class Graph {
 		}
 
 		String[] dimensions = null;
+
 		try {
 			dimensions = reader.readLine().split(" ");
 		}
@@ -192,6 +205,7 @@ public class Graph {
 		char[][] mapArray = new char[this.height][this.width];
 
 		for (int i = 0; i < this.height; i++) {
+
 			// puts a character array in each row, giving us a mapArray[row][characterArray/column]
 			try {
 				mapArray[i] = reader.readLine().toCharArray();
@@ -199,11 +213,8 @@ public class Graph {
 			catch (IOException e) {
 				e.printStackTrace();
 			}
-
 		}
-
 		return mapArray;
-
 	}
 
 	/**
@@ -214,7 +225,7 @@ public class Graph {
 		int stepCount = 0;
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
-				if ((char)nodes[i][j].getData() == '.') {
+				if ((char) nodes[i][j].getData() == '.') {
 					stepCount++;
 				}
 			}
